@@ -13,7 +13,7 @@ public class MyGdxGame extends ApplicationAdapter {
 	SpriteBatch batch;
 	Texture img;
 
-    static final float MAX_VELOCITY = 500;
+    static final float MAX_VELOCITY = 100;
     static final float FRICTION = 0.9f;
     static final int WIDTH = 16;
     static final int HEIGHT = 16;
@@ -21,13 +21,10 @@ public class MyGdxGame extends ApplicationAdapter {
     static final int DRAW_HEIGHT = HEIGHT *3;
     static final int GRAVITY = 0;
 
-    Texture tiles = new Texture("tiles.png");
-    TextureRegion[][] grid = TextureRegion.split(tiles,WIDTH,HEIGHT);
-    TextureRegion down = grid[6][0];
-    TextureRegion up = grid[6][1];
-    TextureRegion right = grid[6][3];
-    TextureRegion left = new TextureRegion(right);
-    boolean faceRight = true;
+    TextureRegion down, up, right, left, stand;
+
+
+    boolean faceDown = true;
     Animation walk;
     float x, y, xv, yv, totalTime;
 
@@ -35,7 +32,13 @@ public class MyGdxGame extends ApplicationAdapter {
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
-		img = new Texture("badlogic.jpg");
+		img = new Texture("tiles.png");
+        Texture tiles = new Texture("tiles.png");
+        TextureRegion[][] grid = TextureRegion.split(tiles,WIDTH,HEIGHT);
+        down = grid[6][0];
+        up = grid[6][1];
+        right = grid[6][3];
+        left = new TextureRegion(right);
         left.flip(true,false);
 	}
 
@@ -43,13 +46,33 @@ public class MyGdxGame extends ApplicationAdapter {
 	public void render () {
         totalTime += Gdx.graphics.getDeltaTime();
 
+        TextureRegion miniCraftDude;
+        if (xv > 0) {
+            miniCraftDude = right;
+        }
+        else if (xv < 0) {
+            miniCraftDude = left;
+        }
+        else if (yv > 0) {
+            miniCraftDude = up;
+        }
+        else {
+            miniCraftDude = down;
+        }
+
         move();
 
 
-		Gdx.gl.glClearColor(0, 0, 0, 1);
+		Gdx.gl.glClearColor(0.5f, 0.8f, 1, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		batch.begin();
-		batch.draw(img, 0, 0);
+        if (faceDown) {
+            batch.draw(miniCraftDude, x, y, DRAW_WIDTH, DRAW_HEIGHT);
+        }
+        else {
+            batch.draw(miniCraftDude, x, y + DRAW_HEIGHT, DRAW_WIDTH, DRAW_HEIGHT * -1);
+        }
+
 		batch.end();
 	}
 	
@@ -61,21 +84,32 @@ public class MyGdxGame extends ApplicationAdapter {
 
     public void move () {
         if (Gdx.input.isKeyPressed(Input.Keys.W)  || Gdx.input.isKeyPressed(Input.Keys.UP)) {
-            yv = MAX_VELOCITY * 4;
+            yv = MAX_VELOCITY;
         }
         else if (Gdx.input.isKeyPressed(Input.Keys.S) || Gdx.input.isKeyPressed(Input.Keys.DOWN)){
             yv = MAX_VELOCITY * -1;
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.D) || Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
+        else if (Gdx.input.isKeyPressed(Input.Keys.D) || Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
             xv = MAX_VELOCITY;
-            faceRight = true;
         }
         else if (Gdx.input.isKeyPressed(Input.Keys.A) || Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
             xv = MAX_VELOCITY * -1;
-            faceRight = false;
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
-            yv = MAX_VELOCITY * 7;
+        if ((Gdx.input.isKeyPressed(Input.Keys.SPACE) && Gdx.input.isKeyPressed(Input.Keys.W)) ||
+                (Gdx.input.isKeyPressed(Input.Keys.SPACE) && Gdx.input.isKeyPressed(Input.Keys.UP))) {
+            yv = MAX_VELOCITY * 4;
+        }
+        else if ((Gdx.input.isKeyPressed(Input.Keys.SPACE) && Gdx.input.isKeyPressed(Input.Keys.S)) ||
+                Gdx.input.isKeyPressed(Input.Keys.SPACE) && Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
+            yv = MAX_VELOCITY * -4;
+        }
+        else if ((Gdx.input.isKeyPressed(Input.Keys.SPACE) && Gdx.input.isKeyPressed(Input.Keys.A)) ||
+                Gdx.input.isKeyPressed(Input.Keys.SPACE) && Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
+            xv = MAX_VELOCITY * - 4;
+        }
+        else if ((Gdx.input.isKeyPressed(Input.Keys.SPACE) && Gdx.input.isKeyPressed(Input.Keys.D)) ||
+                Gdx.input.isKeyPressed(Input.Keys.SPACE) && Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
+            xv = MAX_VELOCITY * 4;
         }
 
         yv += GRAVITY;
