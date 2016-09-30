@@ -24,7 +24,7 @@ public class MyGdxGame extends ApplicationAdapter {
     TextureRegion down, up, right, left, stand;
 
 
-    boolean faceDown = true;
+    String direction = "faceDown";
     Animation walkRight, walkLeft, walkUp, walkDown;
     float x, y, xv, yv, totalTime;
 
@@ -63,23 +63,41 @@ public class MyGdxGame extends ApplicationAdapter {
         move();
 
         TextureRegion miniCraftDude;
-        if (xv > 0) {
-            miniCraftDude = walkRight.getKeyFrame(totalTime,true);
+        if (direction.equals("faceRight")) {
+            if (xv != 0){
+                miniCraftDude = walkRight.getKeyFrame(totalTime,true);
+            }
+            else {
+                miniCraftDude = right;
+            }
         }
-        else if (xv < 0) {
-            miniCraftDude = walkLeft.getKeyFrame(totalTime,true);
+        else if (direction.equals("faceLeft")) {
+            if (xv != 0) {
+                miniCraftDude = walkLeft.getKeyFrame(totalTime,true);
+            }
+            else {
+                miniCraftDude = left;
+            }
+
         }
-        else if (yv > 0) {
-            miniCraftDude = walkUp.getKeyFrame(totalTime,true);
+        else if (direction.equals("faceUp")) {
+            if (yv != 0) {
+                miniCraftDude = walkUp.getKeyFrame(totalTime,true);
+            }
+            else {
+                miniCraftDude = up;
+            }
         }
-        else if (yv < 0){
-            miniCraftDude = walkDown.getKeyFrame(totalTime,true);
-        }
-        else if ((yv == 0) && (faceDown)) {
-            miniCraftDude = down;
+        else if (direction.equals("faceDown")) {
+            if (yv != 0) {
+                miniCraftDude = walkDown.getKeyFrame(totalTime,true);
+            }
+            else {
+                miniCraftDude = down;
+            }
         }
         else {
-            miniCraftDude = up;
+            miniCraftDude = down;
         }
 
 
@@ -87,13 +105,7 @@ public class MyGdxGame extends ApplicationAdapter {
 		Gdx.gl.glClearColor(0.5f, 0.8f, 1, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		batch.begin();
-        if (faceDown) {
-            batch.draw(miniCraftDude, x, y, DRAW_WIDTH, DRAW_HEIGHT);
-        }
-        else {
-            batch.draw(miniCraftDude, x, y, DRAW_WIDTH, DRAW_HEIGHT);
-        }
-
+        batch.draw(miniCraftDude, x, y, DRAW_WIDTH, DRAW_HEIGHT);
 		batch.end();
 	}
 	
@@ -106,35 +118,39 @@ public class MyGdxGame extends ApplicationAdapter {
     public void move () {
         if (Gdx.input.isKeyPressed(Input.Keys.W)  || Gdx.input.isKeyPressed(Input.Keys.UP)) {
             yv = MAX_VELOCITY;
-            faceDown = false;
+            direction = "faceUp";
         }
         else if (Gdx.input.isKeyPressed(Input.Keys.S) || Gdx.input.isKeyPressed(Input.Keys.DOWN)){
             yv = MAX_VELOCITY * -1;
-            faceDown = true;
+            direction = "faceDown";
         }
         else if (Gdx.input.isKeyPressed(Input.Keys.D) || Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
             xv = MAX_VELOCITY;
-            faceDown = true;
+            direction = "faceRight";
         }
         else if (Gdx.input.isKeyPressed(Input.Keys.A) || Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
             xv = MAX_VELOCITY * -1;
-            faceDown = true;
+            direction = "faceLeft";
         }
         if ((Gdx.input.isKeyPressed(Input.Keys.SPACE) && Gdx.input.isKeyPressed(Input.Keys.W)) ||
                 (Gdx.input.isKeyPressed(Input.Keys.SPACE) && Gdx.input.isKeyPressed(Input.Keys.UP))) {
             yv = MAX_VELOCITY * 4;
+            direction = "faceUp";
         }
         else if ((Gdx.input.isKeyPressed(Input.Keys.SPACE) && Gdx.input.isKeyPressed(Input.Keys.S)) ||
                 Gdx.input.isKeyPressed(Input.Keys.SPACE) && Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
             yv = MAX_VELOCITY * -4;
+            direction = "faceDown";
         }
         else if ((Gdx.input.isKeyPressed(Input.Keys.SPACE) && Gdx.input.isKeyPressed(Input.Keys.A)) ||
                 Gdx.input.isKeyPressed(Input.Keys.SPACE) && Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
             xv = MAX_VELOCITY * - 4;
+            direction = "faceLeft";
         }
         else if ((Gdx.input.isKeyPressed(Input.Keys.SPACE) && Gdx.input.isKeyPressed(Input.Keys.D)) ||
                 Gdx.input.isKeyPressed(Input.Keys.SPACE) && Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
             xv = MAX_VELOCITY * 4;
+            direction = "faceRight";
         }
 
         yv += GRAVITY;
@@ -145,7 +161,7 @@ public class MyGdxGame extends ApplicationAdapter {
         xv = decelerate(xv);
         yv = decelerate(yv);
 
-        if (y < 0) {
+        if (y <= 0) {
             y = Gdx.graphics.getHeight();
         }
         if (y >= Gdx.graphics.getHeight()) {
