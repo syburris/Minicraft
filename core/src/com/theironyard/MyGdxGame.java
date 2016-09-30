@@ -161,15 +161,18 @@ public class MyGdxGame extends ApplicationAdapter {
         xv = decelerate(xv);
         yv = decelerate(yv);
 
-        if (y <= 0) {
+        if (y < 0 - DRAW_HEIGHT) {
             y = Gdx.graphics.getHeight();
         }
-        if (y >= Gdx.graphics.getHeight()) {
-            y = 0;
+        if (y > Gdx.graphics.getHeight()) {
+            y = 0 - DRAW_HEIGHT;
         }
 
-        if (x >= Gdx.graphics.getWidth()) {
-            x = 0;
+        if (x > Gdx.graphics.getWidth()) {
+            x = 0 - DRAW_WIDTH;
+        }
+        if (x < 0-DRAW_WIDTH) {
+            x = Gdx.graphics.getWidth();
         }
         System.out.println(xv + " " + yv);
     }
