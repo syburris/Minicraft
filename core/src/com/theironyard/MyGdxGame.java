@@ -40,7 +40,20 @@ public class MyGdxGame extends ApplicationAdapter {
         right = grid[6][3];
         left = new TextureRegion(right);
         left.flip(true,false);
+        TextureRegion walkLeft1 = new TextureRegion(grid[6][2]);
+        TextureRegion walkLeft2 = new TextureRegion(grid[6][3]);
+        walkLeft1.flip(true,false);
+        walkLeft2.flip(true,false);
         walkRight = new Animation(0.08f, grid[6][2], grid[6][3]);
+        walkLeft = new Animation(0.08f,walkLeft1,walkLeft2);
+        TextureRegion walkUp1 = new TextureRegion(grid[6][1]);
+        TextureRegion walkUp2 = new TextureRegion(grid[6][1]);
+        walkUp2.flip(true,false);
+        walkUp = new Animation(0.08f,walkUp1,walkUp2);
+        TextureRegion walkDown1 = new TextureRegion(grid[6][0]);
+        TextureRegion walkDown2 = new TextureRegion(grid[6][0]);
+        walkDown2.flip(true,false);
+        walkDown = new Animation(0.08f, walkDown1,walkDown2);
 	}
 
 	@Override
@@ -49,18 +62,20 @@ public class MyGdxGame extends ApplicationAdapter {
 
         TextureRegion miniCraftDude;
         if (xv > 0) {
-            miniCraftDude = right;
+            miniCraftDude = walkRight.getKeyFrame(totalTime,true);
         }
         else if (xv < 0) {
-            miniCraftDude = left;
+            miniCraftDude = walkLeft.getKeyFrame(totalTime,true);
         }
         else if (yv > 0) {
-            miniCraftDude = up;
+            miniCraftDude = walkUp.getKeyFrame(totalTime,true);
+        }
+        else if (yv < 0){
+            miniCraftDude = walkDown.getKeyFrame(totalTime,true);
         }
         else {
             miniCraftDude = down;
         }
-
         move();
 
 
