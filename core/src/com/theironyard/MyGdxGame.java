@@ -168,6 +168,9 @@ public class MyGdxGame extends ApplicationAdapter {
             y = 0;
         }
 
+        if (x >= Gdx.graphics.getWidth()) {
+            x = 0;
+        }
         System.out.println(xv + " " + yv);
     }
 
