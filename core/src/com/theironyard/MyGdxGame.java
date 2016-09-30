@@ -60,6 +60,8 @@ public class MyGdxGame extends ApplicationAdapter {
 	public void render () {
         totalTime += Gdx.graphics.getDeltaTime();
 
+        move();
+
         TextureRegion miniCraftDude;
         if (xv > 0) {
             miniCraftDude = walkRight.getKeyFrame(totalTime,true);
@@ -73,10 +75,13 @@ public class MyGdxGame extends ApplicationAdapter {
         else if (yv < 0){
             miniCraftDude = walkDown.getKeyFrame(totalTime,true);
         }
-        else {
+        else if ((yv == 0) && (faceDown)) {
             miniCraftDude = down;
         }
-        move();
+        else {
+            miniCraftDude = up;
+        }
+
 
 
 		Gdx.gl.glClearColor(0.5f, 0.8f, 1, 1);
@@ -86,7 +91,7 @@ public class MyGdxGame extends ApplicationAdapter {
             batch.draw(miniCraftDude, x, y, DRAW_WIDTH, DRAW_HEIGHT);
         }
         else {
-            batch.draw(miniCraftDude, x, y + DRAW_HEIGHT, DRAW_WIDTH, DRAW_HEIGHT * -1);
+            batch.draw(miniCraftDude, x, y, DRAW_WIDTH, DRAW_HEIGHT);
         }
 
 		batch.end();
@@ -101,15 +106,19 @@ public class MyGdxGame extends ApplicationAdapter {
     public void move () {
         if (Gdx.input.isKeyPressed(Input.Keys.W)  || Gdx.input.isKeyPressed(Input.Keys.UP)) {
             yv = MAX_VELOCITY;
+            faceDown = false;
         }
         else if (Gdx.input.isKeyPressed(Input.Keys.S) || Gdx.input.isKeyPressed(Input.Keys.DOWN)){
             yv = MAX_VELOCITY * -1;
+            faceDown = true;
         }
         else if (Gdx.input.isKeyPressed(Input.Keys.D) || Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
             xv = MAX_VELOCITY;
+            faceDown = true;
         }
         else if (Gdx.input.isKeyPressed(Input.Keys.A) || Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
             xv = MAX_VELOCITY * -1;
+            faceDown = true;
         }
         if ((Gdx.input.isKeyPressed(Input.Keys.SPACE) && Gdx.input.isKeyPressed(Input.Keys.W)) ||
                 (Gdx.input.isKeyPressed(Input.Keys.SPACE) && Gdx.input.isKeyPressed(Input.Keys.UP))) {
@@ -137,6 +146,9 @@ public class MyGdxGame extends ApplicationAdapter {
         yv = decelerate(yv);
 
         if (y < 0) {
+            y = Gdx.graphics.getHeight();
+        }
+        if (y >= Gdx.graphics.getHeight()) {
             y = 0;
         }
 
