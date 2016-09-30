@@ -25,7 +25,7 @@ public class MyGdxGame extends ApplicationAdapter {
 
 
     boolean faceDown = true;
-    Animation walk;
+    Animation walkRight, walkLeft, walkUp, walkDown;
     float x, y, xv, yv, totalTime;
 
 	
@@ -40,6 +40,7 @@ public class MyGdxGame extends ApplicationAdapter {
         right = grid[6][3];
         left = new TextureRegion(right);
         left.flip(true,false);
+        walkRight = new Animation(0.08f, grid[6][2], grid[6][3]);
 	}
 
 	@Override
