@@ -20,10 +20,8 @@ public class MyGdxGame extends ApplicationAdapter {
     static final int HEIGHT = 16;
     static final int DRAW_WIDTH = WIDTH *3;
     static final int DRAW_HEIGHT = HEIGHT *3;
-    static final int GRAVITY = 0;
 
     TextureRegion down, up, right, left;
-
 
     String direction = "faceDown";
     Animation walkRight, walkLeft, walkUp, walkDown;
@@ -154,7 +152,6 @@ public class MyGdxGame extends ApplicationAdapter {
             direction = "faceRight";
         }
 
-        yv += GRAVITY;
 
         x += xv * Gdx.graphics.getDeltaTime();
         y += yv * Gdx.graphics.getDeltaTime();
