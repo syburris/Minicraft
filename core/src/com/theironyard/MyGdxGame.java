@@ -115,43 +115,27 @@ public class MyGdxGame extends ApplicationAdapter {
 	}
 
     public void move () {
+        int multiplier = 1;
+
+        if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
+            multiplier = 4;
+        }
         if (Gdx.input.isKeyPressed(Input.Keys.W)  || Gdx.input.isKeyPressed(Input.Keys.UP)) {
-            yv = MAX_VELOCITY;
+            yv = MAX_VELOCITY * multiplier;
             direction = "faceUp";
         }
         else if (Gdx.input.isKeyPressed(Input.Keys.S) || Gdx.input.isKeyPressed(Input.Keys.DOWN)){
-            yv = MAX_VELOCITY * -1;
+            yv = MAX_VELOCITY * -multiplier;
             direction = "faceDown";
         }
         else if (Gdx.input.isKeyPressed(Input.Keys.D) || Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-            xv = MAX_VELOCITY;
+            xv = MAX_VELOCITY * multiplier;
             direction = "faceRight";
         }
         else if (Gdx.input.isKeyPressed(Input.Keys.A) || Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-            xv = MAX_VELOCITY * -1;
+            xv = MAX_VELOCITY * -multiplier;
             direction = "faceLeft";
         }
-        if ((Gdx.input.isKeyPressed(Input.Keys.SPACE) && Gdx.input.isKeyPressed(Input.Keys.W)) ||
-                (Gdx.input.isKeyPressed(Input.Keys.SPACE) && Gdx.input.isKeyPressed(Input.Keys.UP))) {
-            yv = MAX_VELOCITY * 4;
-            direction = "faceUp";
-        }
-        else if ((Gdx.input.isKeyPressed(Input.Keys.SPACE) && Gdx.input.isKeyPressed(Input.Keys.S)) ||
-                Gdx.input.isKeyPressed(Input.Keys.SPACE) && Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
-            yv = MAX_VELOCITY * -4;
-            direction = "faceDown";
-        }
-        else if ((Gdx.input.isKeyPressed(Input.Keys.SPACE) && Gdx.input.isKeyPressed(Input.Keys.A)) ||
-                Gdx.input.isKeyPressed(Input.Keys.SPACE) && Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-            xv = MAX_VELOCITY * - 4;
-            direction = "faceLeft";
-        }
-        else if ((Gdx.input.isKeyPressed(Input.Keys.SPACE) && Gdx.input.isKeyPressed(Input.Keys.D)) ||
-                Gdx.input.isKeyPressed(Input.Keys.SPACE) && Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-            xv = MAX_VELOCITY * 4;
-            direction = "faceRight";
-        }
-
 
         x += xv * Gdx.graphics.getDeltaTime();
         y += yv * Gdx.graphics.getDeltaTime();
